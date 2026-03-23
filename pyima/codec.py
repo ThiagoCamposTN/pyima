@@ -172,14 +172,14 @@ def decode_block(block):
     global _decoder_index
     global _decoder_step
 
-    result = ''
+    result = b''
     _decoder_predicted = struct.unpack('h', block[0:2])[0]
     _decoder_index = struct.unpack('B', block[2:3])[0]
     _decoder_step = t_step[_decoder_index]
     result += block[0:2]
 
     for i in range(4, len(block)):
-        original_sample = struct.unpack('B', block[i])[0]
+        original_sample = struct.unpack('B', block[i:i+1])[0]
         second_sample = original_sample >> 4
         first_sample = (second_sample << 4) ^ original_sample
         result += struct.pack('h', _decode_sample(first_sample))
